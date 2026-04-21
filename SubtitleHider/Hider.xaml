@@ -1,0 +1,25 @@
+<Window x:Class="SubtitleHider.Hider"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SubtitleHider"
+        mc:Ignorable="d"
+        Title="Hider" Height="75" Width="1125"
+        AllowsTransparency="True"
+        WindowStyle="None"
+        Background="Transparent"
+        Opacity="1"
+        ResizeMode="CanResizeWithGrip"
+        MouseMove="Window_MouseMove"
+        MouseLeftButtonDown="Window_MouseLeftButtonDown"
+        MouseRightButtonDown="Window_MouseRightButtonDown"
+        Closing="Window_Closing"
+        LocationChanged="Window_LocationChanged"
+        SizeChanged="Window_SizeChanged"
+        MouseEnter="Window_MouseEnter"
+        MouseLeave="Window_MouseLeave">
+    <Grid x:Name="MyGrid">
+        <Border x:Name="WindowBorder" BorderBrush="Transparent" BorderThickness="2"></Border>
+    </Grid>
+</Window>

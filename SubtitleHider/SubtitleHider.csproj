@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <RootNamespace>SubtitleHider</RootNamespace>
+    <AssemblyName>SubtitleHider</AssemblyName>
+    <Version>1.0.0</Version>
+    <Authors>SubtitleHider</Authors>
+    <Product>SubtitleHider</Product>
+    <Description>A lightweight Windows desktop app for hiding video subtitles with a transparent overlay window.</Description>
+  </PropertyGroup>
+
+</Project>
