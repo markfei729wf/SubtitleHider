@@ -29,19 +29,30 @@ jobs:
 
       - name: Publish framework-dependent
         run: |
+          Remove-Item -Recurse -Force ./publish -ErrorAction SilentlyContinue
           dotnet publish SubtitleHider/SubtitleHider.csproj `
-            -c Release -r win-x64 `
-            --self-contained false `
-            -p:PublishSingleFile=true `
-            -o ./publish
+            --configuration Release `
+            --runtime win-x64 `
+            --no-self-contained `
+            /p:PublishSingleFile=true `
+            --output ./publish
 
       - name: Publish self-contained
         run: |
+          Remove-Item -Recurse -Force ./publish-full -ErrorAction SilentlyContinue
           dotnet publish SubtitleHider/SubtitleHider.csproj `
-            -c Release -r win-x64 `
+            --configuration Release `
+            --runtime win-x64 `
             --self-contained true `
-            -p:PublishSingleFile=true `
-            -o ./publish-full
+            /p:PublishSingleFile=true `
+            --output ./publish-full
+
+      - name: Check publish sizes
+        run: |
+          Write-Host "=== Framework-dependent ==="
+          Get-ChildItem ./publish | Select-Object Name, @{N="SizeKB";E={"{0:N1}" -f ($_.Length/1KB)}}
+          Write-Host "=== Self-contained ==="
+          Get-ChildItem ./publish-full | Select-Object Name, @{N="SizeKB";E={"{0:N1}" -f ($_.Length/1KB)}}
 
       - name: Upload framework-dependent artifact
         uses: actions/upload-artifact@v4
@@ -75,11 +86,23 @@ jobs:
           name: SubtitleHider-SelfContained
           path: ./artifacts/full
 
+      - name: Check artifact sizes
+        run: |
+          Write-Host "=== Framework-dependent artifact ==="
+          Get-ChildItem ./artifacts/framework -Recurse | Select-Object FullName, @{N="SizeMB";E={"{0:N2}" -f ($_.Length/1MB)}}
+          Write-Host "=== Self-contained artifact ==="
+          Get-ChildItem ./artifacts/full -Recurse | Select-Object FullName, @{N="SizeMB";E={"{0:N2}" -f ($_.Length/1MB)}}
+
+      - name: Rename artifacts
+        run: |
+          Rename-Item ./artifacts/framework/SubtitleHider.exe SubtitleHider-FrameworkDependent.exe
+          Rename-Item ./artifacts/full/SubtitleHider.exe SubtitleHider-SelfContained.exe
+
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            ./artifacts/framework/SubtitleHider.exe
-            ./artifacts/full/SubtitleHider.exe
+            ./artifacts/framework/SubtitleHider-FrameworkDependent.exe
+            ./artifacts/full/SubtitleHider-SelfContained.exe
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
